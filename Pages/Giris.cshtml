@@ -1,0 +1,26 @@
+﻿@page
+@model Stok_Yonetim.Pages.GirisModel
+@{
+    ViewData["Title"] = "Sisteme Giriş";
+}
+<div class="dashboard-container" style="max-width: 450px; margin: 60px auto;">
+    <h2 style="text-align: center; margin-bottom: 20px;">🌊 Wash & Wash Giriş</h2>
+    <div class="table-container" style="padding: 25px;">
+        @if (!string.IsNullOrEmpty(Model.HataMesaji))
+        {
+            <div style="background-color: #e74c3c; color: white; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">@Model.HataMesaji</div>
+        }
+        <form method="post">
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Kullanıcı Adı:</label>
+                <input type="text" name="KullaniciAdi" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top:5px;" placeholder="Örn: admin" />
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: bold;">Şifre:</label>
+                <input type="password" name="Sifre" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top:5px;" placeholder="••••••" />
+            </div>
+            <button type="submit" class="btn-add" style="width: 100%; padding: 12px; background-color: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Giriş Yap</button>
+            <a href="/KayitOl" style="display: block; text-align: center; margin-top: 15px; color: #3498db; text-decoration: none; font-weight: bold;">Yeni Hesap Oluştur (+ Geri Al Butonlu Kayıt)</a>
+        </form>
+    </div>
+</div>

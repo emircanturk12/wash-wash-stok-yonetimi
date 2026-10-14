@@ -1,0 +1,153 @@
+﻿@using System.Linq
+@inject Stok_Yonetim.Data.AppDbContext _context
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Wash & Wash Stok Paneli</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        html, body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s ease;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+
+        .custom-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 10px 0;
+        }
+
+        .brand-logo {
+            font-weight: 800;
+            font-size: 1.6rem;
+            text-decoration: none;
+            color: #ffffff !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-link-custom {
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+            padding: 8px 18px !important;
+        }
+
+            .nav-link-custom:hover {
+                background-color: rgba(255,255,255,0.15);
+                border-radius: 5px;
+            }
+
+        .custom-footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 25px 0;
+            margin-top: 40px;
+        }
+
+        body.dark-theme .custom-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-theme .custom-footer {
+            background-color: #121212;
+            border-top: 1px solid #333;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm custom-header mb-4">
+            <div class="container">
+                <a class="navbar-brand brand-logo" asp-area="" asp-page="/Index"><span style="font-size: 28px;">🌊</span> Wash & Wash</a>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav align-items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Yonetici"))
+                            {
+                                var okunmamis = _context.Bildirimler.Where(b => !b.OkunduMu).OrderByDescending(b => b.Tarih).ToList();
+                                <li class="nav-item dropdown ms-2 me-3">
+                                    <a class="nav-link dropdown-toggle" href="#" id="bildirimDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white; position: relative;">
+                                        🔔 Bildirimler
+                                        @if (okunmamis.Count > 0)
+                                        {
+                                            <span style="position: absolute; top: 0; right: 0; background: #e74c3c; color: white; border-radius: 50%; padding: 2px 6px; font-size: 11px; font-weight: bold;">@okunmamis.Count</span>
+                                        }
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bildirimDropdown" style="width: 350px; max-height: 400px; overflow-y: auto;">
+                                        <li><h6 class="dropdown-header">Stok Talepleri</h6></li>
+                                        @if (okunmamis.Count == 0)
+                                        {
+                                            <li><span class="dropdown-item text-muted">Yeni bildirim yok.</span></li>
+                                        }
+                                        else
+                                        {
+                                            foreach (var b in okunmamis)
+                                            {
+                                                <li>
+                                                    <span class="dropdown-item" style="white-space: normal; font-size: 13px; border-bottom: 1px solid #eee; padding: 10px;">
+                                                        <strong style="color:#3498db;">@b.Tarih.ToString("HH:mm")</strong> <br /> @b.Mesaj
+                                                    </span>
+                                                </li>
+                                            }
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <form method="post" asp-page="/Index" asp-page-handler="BildirimTemizle">
+                                                    <button type="submit" class="dropdown-item text-center" style="color: #e74c3c; font-weight: bold;">✔️ Tümünü Okundu İşaretle</button>
+                                                </form>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+
+                            <li class="nav-item"><a class="nav-link nav-link-custom" asp-area="" asp-page="/Index">🏠 Ana Sayfa</a></li>
+                            @if (User.IsInRole("Yonetici"))
+                            {
+                                <li class="nav-item"><a class="nav-link nav-link-custom" asp-area="" asp-page="/UrunEkle">➕ Yeni Ürün Ekle</a></li>
+                            }
+                            <li class="nav-item"><a class="nav-link nav-link-custom" asp-area="" asp-page="/Cikis" style="color: #ff7675 !important;">🚪 Çıkış Yap</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link nav-link-custom" asp-area="" asp-page="/Giris">Sisteme Giriş</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container main-content">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="custom-footer">
+        <div class="container text-center"><span style="font-size: 13px; color: #bdc3c7;">&copy; 2026 Wash & Wash Online Stok Otomasyonu</span></div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

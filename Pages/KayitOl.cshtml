@@ -1,0 +1,56 @@
+﻿@page
+@model Stok_Yonetim.Pages.KayitOlModel
+@{
+    ViewData["Title"] = "Yeni Hesap Oluştur";
+}
+<div class="dashboard-container" style="max-width: 600px; margin: 40px auto;">
+    <h2 style="text-align: center; margin-bottom: 20px;">👤 Detaylı Müşteri Kaydı</h2>
+    <div class="table-container" style="padding: 25px;">
+        @if (!string.IsNullOrEmpty(Model.HataMesaji))
+        {
+            <div style="background-color: #e74c3c; color: white; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">@Model.HataMesaji</div>
+        }
+        <form method="post">
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: bold;">Ad:</label>
+                    <input type="text" asp-for="YeniKullanici.Ad" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: bold;">Soyad:</label>
+                    <input type="text" asp-for="YeniKullanici.Soyad" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: bold;">Telefon:</label>
+                    <input type="tel" asp-for="YeniKullanici.Telefon" required placeholder="05XX..." style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: bold;">E-posta:</label>
+                    <input type="email" asp-for="YeniKullanici.Eposta" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Uyruk (Ülke):</label>
+                <input type="text" asp-for="YeniKullanici.Uyruk" value="Türkiye" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+            </div>
+
+            <hr style="margin: 20px 0;" />
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Sisteme Giriş Kullanıcı Adı:</label>
+                <input type="text" asp-for="YeniKullanici.KullaniciAdi" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: bold;">Giriş Şifresi:</label>
+                <input type="password" asp-for="YeniKullanici.Sifre" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+            </div>
+
+            <button type="submit" class="btn-add" style="width: 100%; padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Kayıt Ol ve Hesap Aç</button>
+            <a href="/Giris" style="display: block; text-align: center; margin-top: 15px; color: #7f8c8d; text-decoration: none;">Zaten hesabınız var mı? Giriş Yapın</a>
+        </form>
+    </div>
+</div>
